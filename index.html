@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Pixel</title>
+		<link href="styles/styles.css" rel="stylesheet" type="text/css" />
+		<script src="../closure-library/closure/goog/base.js"></script>
+
+		<script src="js/pixel.js"></script>
+	</head>
+	<body>
+		<div id="box"></div>
+		<button id="go" onclick="animator.slide(500,200)">
+			Animate
+		</button>
+		
+		<button id="yo" onclick="animator.slide(50,50)">
+			Back
+		</button>
+		
+		<button id="pow" onclick="animator.slide(500,50)">
+			Reset
+		</button>
+		
+		<script>
+		<!--
+			var animator = new gb.ui.Animator('box',1000);
+		//-->
+		</script>
+		
+	</body>
+</html>
