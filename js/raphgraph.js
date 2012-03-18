@@ -188,10 +188,7 @@ gb.ui.Chart.prototype.animate = function(){
 			// this.bars[i].animate(animation);
 		}
 	}
-	
 	this.drawTickMarks();
-
-	
 };
 
 /**
