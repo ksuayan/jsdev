@@ -53,7 +53,7 @@ gb.ui.Chart = function(x,y,width,height) {
 		this.chartHeight)
 		.attr({fill:"#efefef", "stroke-width": 1, "stroke":"#666"});
 		
-	console.debug(this.chartArea);
+	// console.debug(this.chartArea);
 	
 	this.numberOfBars = 15;
 	this.barWidth = 40;
@@ -140,7 +140,7 @@ gb.ui.Chart.prototype.drawTickMarks = function() {
 		var tickLabel  = tickIntervalValue * i;
 		var yPos = this.chartBottom - this.scaledValue(tickIntervalValue * i);
 		
-		console.debug("tickPositions: "+this.tickXPos+" "+yPos+" value: "+tickLabel)
+		// console.debug("tickPositions: "+this.tickXPos+" "+yPos+" value: "+tickLabel)
 		tickSet.push(
 			this.chart.text(this.tickXPos, yPos, tickLabel ).attr({"font":"10pt 'Arial'"})
 		);
@@ -178,8 +178,8 @@ gb.ui.Chart.prototype.animate = function(){
 			var newYPos = this.chartBottom - newHeight;
 			var fillColor = this.colorCode(newData[i]);
 			
-			var barAnimation = Raphael.animation({height: newHeight, y: newYPos, fill: fillColor, "stroke-width":0 }, 1000, "easeInOut");
-			var textAnimation = Raphael.animation({height: newHeight, y: newYPos -10}, 1000, "easeInOut");
+			var barAnimation = Raphael.animation({height: newHeight, y: newYPos, fill: fillColor, "stroke-width":0 }, 500, "easeInOut");
+			var textAnimation = Raphael.animation({height: newHeight, y: newYPos -10}, 500, "easeInOut");
 			
 			var barObj = this.bars[i];
 			barObj[0].animate(barAnimation);
