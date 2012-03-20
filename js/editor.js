@@ -88,6 +88,16 @@ gb.ui.MapEditor = function(x,y,width,height) {
 	this.clickBufferPath = this.mapObj.set();
 	this.clickBufferIndex = 0;
 	
+	this.drawArea = this.mapObj
+		.rect(60,60,880,700)
+		.attr({
+			"fill":"#999",
+			"fill-opacity": 0.3,
+			"stroke":"#333"
+	});
+
+	var thisObj = this;
+	
 	this.renderButton = new gb.ui.Button(this.mapObj, 150, 20, "Render", 
 		function(){
 			map.renderClickBuffer();
@@ -97,17 +107,25 @@ gb.ui.MapEditor = function(x,y,width,height) {
 		function(){
 			map.resetClickBuffer();
 		});
+		
+	this.zoomInButton = new gb.ui.Button(this.mapObj, 400, 20, "Zoom In", 
+		function(){
+			map.mapObj.setViewBox(60,60,400,300,true);
+		});
+	
+	this.zoomOutButton = new gb.ui.Button(this.mapObj, 100, 80, "Zoom Out", 
+		function(){
+			map.mapObj.setViewBox(0,0,thisObj.width,thisObj.height,true);
+		});
+		
+	this.panRight = new gb.ui.Button(this.mapObj, 180, 80, "Pan Right", 
+		function(){
+			map.mapObj.setViewBox(500,60,400,300,true);
+		});	
 };
 
 
 gb.ui.MapEditor.prototype.init = function() {
-	this.drawArea = this.mapObj
-		.rect(60,60,800,600)
-		.attr({
-			"fill":"#999",
-			"fill-opacity": 0.3,
-			"stroke":"#333"
-		});
 };
 
 gb.ui.MapEditor.prototype.grid = function(horizontal,vertical) {
@@ -130,14 +148,11 @@ gb.ui.MapEditor.prototype.printCoords = function(msg) {
 };
 
 
-
 gb.ui.MapEditor.prototype.renderClickBuffer = function(e) {
 	
 	var buffer = this.clickBufferStr();
 	
-	
 	if (buffer) {
-		
 		console.debug("renderClickBuffer "+ buffer);
 		this.clickBufferPath.push(this.mapObj.path(buffer).attr(gb.ui.Default.lineStyle.sidewalk));
 		this.clickBufferPath.push(this.mapObj.path(buffer).attr(gb.ui.Default.lineStyle.road));
@@ -152,21 +167,29 @@ gb.ui.MapEditor.prototype.renderClickBuffer = function(e) {
 gb.ui.MapEditor.prototype.resetClickBuffer = function(e) {
 	this.clickBuffer = [];
 	this.clickBufferIndex = 0;
+	
 	this.clearSet(this.clickBufferPath);
 	this.clickBufferPath = this.mapObj.set();
 
 };
 
 gb.ui.MapEditor.prototype.clearSet = function(objectSet) {
-	if (objectSet) {
+	
+	console.debug("clearSet: ");
+	if (objectSet && objectSet.length > 0) {
 		objectSet.forEach(function(element){
 			element.remove();
 		});
 	}
+	objectSet.clear();
+	console.debug(objectSet);
+
 };
 
 
 gb.ui.MapEditor.prototype.temp = function() {
+	
+	var thisObj = this;
 
 	// import a set		
 	this.vectorSet = this.mapObj.set();
@@ -205,16 +228,6 @@ gb.ui.MapEditor.prototype.temp = function() {
 		}
 	);
 	
-	// x1,y1 (cp1), x2,y2 (cp2), x,y
-	var curve1 = Raphael.format("M{0},{1}C{2},{3},{4},{5},{6},{7}", 100,100, 100,350, 400,0, 100,500);
-	this.mapObj.path(curve1).attr(sidewalk);
-	this.mapObj.path(curve1).attr(road);
-	this.mapObj.path(curve1).attr(dashed);
-	
-	var curve2 = Raphael.format("M{0},{1}S{2},{3},{4},{5}", 600,200, 200,250, 300,100);
-	this.mapObj.path(curve2).attr(sidewalk);
-	this.mapObj.path(curve2).attr(road);
-	this.mapObj.path(curve2).attr(dashed);
 };
 
 
@@ -226,17 +239,46 @@ gb.ui.MapEditor.prototype.draw = function() {
 	this.clickBufferIndex = 0;
 	
 	this.drawArea.mousedown(function(e){
+		
 		thisObj.clickBuffer[thisObj.clickBufferIndex] = new gb.ui.Point(e.offsetX, e.offsetY);
 		thisObj.printCoords(thisObj.clickBuffer[thisObj.clickBufferIndex]);
-		thisObj.clickBufferIndex++;
 		
-		thisObj.clickBufferPath.push(
-			thisObj.mapObj
+			var circle = thisObj.mapObj
 				.circle(e.offsetX, e.offsetY, 20)
 				.attr({'fill':'#ff4900','stroke-width':"0"})
-		);
+				.data("index", thisObj.clickBufferIndex);
+				
+			circle.drag(
+					function(dx,dy) {
+						var trans_x = dx - circle.ox;
+		    			var trans_y = dy - circle.oy;
+   						circle.translate(trans_x,trans_y);
+    					circle.ox = dx;
+    					circle.oy = dy;
+					},
 		
-		console.debug("clickBuffer: " + thisObj.clickBufferStr());
+					function() {
+						circle.ox = 0;
+						circle.oy = 0;
+						console.debug("start drag ");
+					},
+		
+					function() {
+						var index = circle.data("index");
+						thisObj.clickBuffer[index].x = thisObj.clickBuffer[index].x + circle.ox;
+    					thisObj.clickBuffer[index].y = thisObj.clickBuffer[index].y + circle.oy;
+						console.debug("end drag "+ thisObj.clickBuffer[index].x 
+							+ ", " + thisObj.clickBuffer[index].y);
+						
+						thisObj.clearSet(thisObj.clickBufferPath);
+						thisObj.renderClickBuffer();
+					}					
+				);
+				
+		thisObj.clickBufferPath.push(circle);
+		thisObj.clickBufferIndex++;
+		console.debug("clickBuffer: " + thisObj.clickBufferStr());		
+
 	});
 	
 
