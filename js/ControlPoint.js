@@ -4,12 +4,46 @@ goog.require('gb.model.Point');
 
 gb.ui.ControlPoint = function(x,y) {
 	gb.model.Point.call(this,x,y);
+
 };
 
 goog.inherits(gb.ui.ControlPoint, gb.model.Point);
 
+
+gb.ui.ControlPoint.prototype.setOnDragComplete = function(onDragComplete) {
+	this.onDragComplete = onDragComplete;	
+};
+
 gb.ui.ControlPoint.prototype.show = function(paper) {
-	paper.circle(this.x,this.y, 
+	
+	var thisObj = this;
+	
+	var circle = paper.circle(this.x,this.y, 
 		gb.config.Default.controlPointRadius)
 		.attr(gb.config.Default.controlPoint);
+
+	circle.drag(
+		function(dx,dy) {
+			var trans_x = dx - circle.ox;
+		    var trans_y = dy - circle.oy;
+   			circle.translate(trans_x,trans_y);
+    		circle.ox = dx;
+    		circle.oy = dy;
+		},
+		
+		function() {
+			circle.ox = 0;
+			circle.oy = 0;
+		},
+		
+		function() {
+			thisObj.x = thisObj.x + circle.ox;
+			thisObj.y = thisObj.y + circle.oy;
+			if (typeof thisObj.onDragComplete === 'function') {
+				thisObj.onDragComplete();
+			}
+		}					
+	);
+					
 };
+

@@ -3,13 +3,15 @@ goog.provide('gb.ui.Path');
 gb.ui.Path = function(paper) {
 	this.elements = [];
 	this.paper = paper;
-
+	this.objectSet = null;
 };
+
 
 gb.ui.Path.prototype.add = function(obj) {
 	var len = this.elements.length;
 	this.elements[len] = obj;
 };
+
 
 gb.ui.Path.prototype.toString = function() {
 	var str ="Path[";
@@ -25,8 +27,8 @@ gb.ui.Path.prototype.toString = function() {
 gb.ui.Path.prototype.draw = function() {
 	this.clear();
 	this.paper.setStart();
-	this.showControls();
 	this.paper.path(this.getSVGString());
+	this.showControls();
 	this.objectSet = this.paper.setFinish();
 };
 
@@ -34,7 +36,7 @@ gb.ui.Path.prototype.draw = function() {
 gb.ui.Path.prototype.showControls = function() {
 	if (this.elements.length > 0) {
 		for (var i=0; i < this.elements.length; i++) {
-			this.elements[i].show(this.paper);
+			this.elements[i].show(this.paper, this.draw);
 		}
 	}
 };
@@ -66,4 +68,14 @@ gb.ui.Path.prototype.clearSet = function(objectSet) {
 		objectSet.clear();
 	}
 };
+
+/**
+ * Clear both SVG and model data.
+ */
+gb.ui.Path.prototype.reset = function() {
+	this.elements = [];
+	this.clear();
+};
+
+
 
