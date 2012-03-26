@@ -1,11 +1,10 @@
 goog.provide('gb.ui.MapEditor');
 
 goog.require('gb.config.Default');
-
 goog.require('gb.model.Point');
-goog.require('gb.model.Path');
 
 goog.require('gb.ui.ControlPoint');
+goog.require('gb.ui.Path');
 goog.require('gb.ui.Button');
 
 
@@ -59,17 +58,17 @@ gb.ui.MapEditor.prototype.drawButtons = function() {
 	this.renderButton = new gb.ui.Button(this.mapObj, 150, 20, "Render", 
 		function(){
 			map.renderClickBuffer();
-	});
+		});
 		
 	this.resetButton = new gb.ui.Button(this.mapObj, 250, 20, "Clear", 
 		function(){
 			map.resetClickBuffer();
-	});
+		});
 		
 	this.zoomInButton = new gb.ui.Button(this.mapObj, 400, 20, "Zoom In", 
 		function(){
 			map.mapObj.setViewBox(60,60,400,300,true);
-	});
+		});
 };
 
 
@@ -100,24 +99,13 @@ gb.ui.MapEditor.prototype.renderClickBuffer = function(e) {
 gb.ui.MapEditor.prototype.resetClickBuffer = function(e) {
 	this.clickBuffer = [];
 	this.clickBufferIndex = 0;
-	
-	this.clearSet(this.clickBufferPath);
 	this.clickBufferPath = this.mapObj.set();
-
-};
-
-gb.ui.MapEditor.prototype.clearSet = function(objectSet) {
 	
-	console.debug("clearSet: ");
-	if (objectSet && objectSet.length > 0) {
-		objectSet.forEach(function(element){
-			element.remove();
-		});
-	}
-	objectSet.clear();
-	console.debug(objectSet);
+	this.pathElements.clear();
 
 };
+
+
 
 
 gb.ui.MapEditor.prototype.draw = function() {
@@ -156,8 +144,6 @@ gb.ui.MapEditor.prototype.draw = function() {
     					thisObj.clickBuffer[index].y = thisObj.clickBuffer[index].y + circle.oy;
 						console.debug("end drag "+ thisObj.clickBuffer[index].x 
 							+ ", " + thisObj.clickBuffer[index].y);
-						
-						thisObj.clearSet(thisObj.clickBufferPath);
 						thisObj.renderClickBuffer();
 					}					
 				);
@@ -176,50 +162,22 @@ gb.ui.MapEditor.prototype.drawLine = function() {
 
 	var thisObj = this;
 	
-	this.lastX = null;
-	this.lastY = null;
-	
-	var paths = new gb.model.Path();
-	console.debug("paths", paths);
+	this.pathElements = new gb.ui.Path(this.mapObj);
 	
 	this.drawArea.mousedown(function(e){
-		
-		paths.add(new gb.model.Point(e.offsetX, e.offsetY));
-		console.debug(paths.toString());
-		
-		if (thisObj.lastX) {
-			var line = thisObj.mapObj.path(
-				"M"+ thisObj.lastX + " " + thisObj.lastY 
-				+ "L"+ e.offsetX + " "+e.offsetY);			
-		}
-		thisObj.lastX = e.offsetX;
-		thisObj.lastY = e.offsetY;
+		var point = new gb.ui.ControlPoint(e.offsetX, e.offsetY);
+		thisObj.pathElements.add(point);
+		thisObj.pathElements.draw();
+		console.debug("pathElements", thisObj.pathElements);
 	});
-	
 };
 
-
-
-
-gb.ui.MapEditor.prototype.clickBufferStr = function() {
-	var str = "";
-	if (this.clickBuffer.length > 0) {
-		str = "M" + this.clickBuffer[0].x + "," 
-			+ this.clickBuffer[0].y + " L";
-		for (var i=1; i < this.clickBuffer.length; i++) {
-			str = str + this.clickBuffer[i].x + "," 
-				+ this.clickBuffer[i].y + " ";
-		}
-	}
-	return str;
-};
 
 function initPage() {
 	map = new gb.ui.MapEditor("svg-content",1002,802);
 	
 	map.grid(20,20);
-	map.drawButtons();
-	
+	map.drawButtons();	
 	map.initDrawArea(60,60,880,700);
 	map.drawLine();
 }

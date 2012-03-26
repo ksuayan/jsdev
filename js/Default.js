@@ -6,6 +6,13 @@ gb.config.Default = {
 		"stroke-width": 0.1
 	},
 	
+	controlPoint: {
+		"fill": "#ff0000",
+		"stroke-width":0
+	},
+	
+	controlPointRadius: 5,
+	
 	testButtonStyle: {
 		"font":"10pt 'Arial'",
 		"cursor":"pointer"
