@@ -45,7 +45,7 @@ gb.ui.Path.prototype.showControls = function() {
 gb.ui.Path.prototype.getSVGString = function() {
 	var str = "";
 	if (this.elements.length > 0) {
-		str = "M" + this.elements[0].x + ","+ this.elements[0].y + " L";
+		str = "M" + this.elements[0].x + ","+ this.elements[0].y + " C";
 		for (var i=1; i < this.elements.length; i++) {
 			str = str + this.elements[i].x + "," 
 				+ this.elements[i].y + " ";
