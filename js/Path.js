@@ -4,12 +4,24 @@ gb.ui.Path = function(paper) {
 	this.elements = [];
 	this.paper = paper;
 	this.objectSet = null;
+	this.style = gb.config.Default.line.path;
 };
 
 
 gb.ui.Path.prototype.add = function(obj) {
 	var len = this.elements.length;
 	this.elements[len] = obj;
+};
+
+gb.ui.Path.prototype.get = function(index){
+	if (index < this.elements.length){
+		return this.elements[index];
+	}
+	return null;
+};
+
+gb.ui.Path.prototype.index = function(){
+	return this.elements.length-1;
 };
 
 
@@ -27,7 +39,7 @@ gb.ui.Path.prototype.toString = function() {
 gb.ui.Path.prototype.draw = function() {
 	this.clear();
 	this.paper.setStart();
-	this.paper.path(this.getSVGString());
+	this.paper.path(this.getSVGString()).attr();
 	this.showControls();
 	this.objectSet = this.paper.setFinish();
 };

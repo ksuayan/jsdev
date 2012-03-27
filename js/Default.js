@@ -6,8 +6,13 @@ gb.config.Default = {
 		"stroke-width": 0.1
 	},
 	
+	endPoint: {
+		"fill": "#ffaa00",
+		"stroke-width":0
+	},
+	
 	controlPoint: {
-		"fill": "#ff0000",
+		"fill": "#ff7400",
 		"stroke-width":0
 	},
 	
@@ -32,7 +37,13 @@ gb.config.Default = {
 			"stroke":"#333"
 	},
 	
-	lineStyle: {
+	line: {
+
+		path: {
+			'stroke':'#666',
+		    'stroke-width':'1'
+		},
+
 		
 		sidewalk: {
 			'stroke':'#fff',
