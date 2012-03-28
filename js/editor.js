@@ -46,12 +46,20 @@ gb.ui.MapEditor.prototype.initDrawArea = function(xOffset,yOffset, width, height
 
 
 gb.ui.MapEditor.prototype.drawButtons = function() {
+	
+	
+	this.resetButton = new gb.ui.Button(this.mapObj, 50, 20, "Clear", 
+		function(){ map.pathElements.reset(); });
 		
-	this.resetButton = new gb.ui.Button(this.mapObj, 25, 20, "Clear", 
-		function(){
-			map.pathElements.reset();
-		});
+	this.closePathButton = new gb.ui.Button(this.mapObj, 105, 20, "Close", 
+		function(){ map.pathElements.toggleClosedPath(); });
 
+	this.fillButton = new gb.ui.Button(this.mapObj, 150, 20, "Fill", 
+		function(){ map.pathElements.toggleFilledPath(); });
+
+	this.controlPointsButton = new gb.ui.Button(this.mapObj, 220, 20, "ControlPoints", 
+		function(){ map.pathElements.toggleControlPoints(); });
+	
 };
 
 gb.ui.MapEditor.prototype.printCoords = function(msg) {

@@ -4,7 +4,10 @@ gb.ui.Path = function(paper) {
 	this.elements = [];
 	this.paper = paper;
 	this.objectSet = null;
-	this.style = gb.config.Default.line.path;
+	this.style = gb.config.Default.path;
+	this.closedPath = false;
+	this.filledPath = false;
+	this.controlPoints = true;
 };
 
 
@@ -39,8 +42,8 @@ gb.ui.Path.prototype.toString = function() {
 gb.ui.Path.prototype.draw = function() {
 	this.clear();
 	this.paper.setStart();
-	this.paper.path(this.getSVGString()).attr();
-	this.showControls();
+	this.paper.path(this.getSVGString()).attr(this.style);
+	if (this.controlPoints)	this.showControls();
 	this.objectSet = this.paper.setFinish();
 };
 
@@ -62,8 +65,34 @@ gb.ui.Path.prototype.getSVGString = function() {
 			str = str + this.elements[i].x + "," 
 				+ this.elements[i].y + " ";
 		}
+		
+		if (this.closedPath) {
+			str = str + "Z";
+		}
 	}
 	return str;
+};
+
+gb.ui.Path.prototype.toggleClosedPath = function() {
+	this.closedPath = !this.closedPath;
+	this.draw();
+};
+
+gb.ui.Path.prototype.toggleFilledPath = function() {
+	this.filledPath = !this.filledPath;
+	if (this.filledPath) {
+		this.style = gb.config.Default.filledPath;
+		this.closedPath = true;
+	} else {
+		this.style = gb.config.Default.path;
+	}
+	this.draw();
+};
+
+
+gb.ui.Path.prototype.toggleControlPoints = function() {
+	this.controlPoints = !this.controlPoints;
+	this.draw();
 };
 
 

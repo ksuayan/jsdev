@@ -25,3 +25,12 @@ gb.ui.Button = function(paper, x,y, message, onClick) {
 	
 	this.textObj.toFront();
 };
+
+gb.ui.Button.prototype.getWidth = function() {
+	console.debug(this.buttonRect.attrs);
+	return this.buttonRect.attrs.width;
+};
+
+gb.ui.Button.prototype.getHeight = function() {
+	return this.buttonRect.attrs.height;
+};

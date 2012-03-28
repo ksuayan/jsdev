@@ -26,7 +26,7 @@ gb.config.Default = {
 	buttonStyle: {
 		"fill":"#999999", 
 		"cursor": "pointer",
-		"stroke-width":1
+		"stroke-width":0
 	},
 	
 	buttonPadding: 5,
@@ -36,14 +36,21 @@ gb.config.Default = {
 			"fill-opacity": 0.3,
 			"stroke":"#333"
 	},
+
+	path: {
+		'stroke':'#666',
+	    'stroke-width':'1'
+	},
+
+	filledPath: {
+		"fill":"#dcf900",
+		"fill-opacity": 0.5,
+		'stroke':'#666',
+	    'stroke-width':'1'
+	},
+
 	
 	line: {
-
-		path: {
-			'stroke':'#666',
-		    'stroke-width':'1'
-		},
-
 		
 		sidewalk: {
 			'stroke':'#fff',
