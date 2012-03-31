@@ -28,6 +28,12 @@ gb.config.Default = {
 		"cursor": "pointer",
 		"stroke-width":0
 	},
+
+	rectangle: {
+		"fill":"#333", 
+		"cursor": "arrow",
+		"stroke-width":0
+	},
 	
 	buttonPadding: 5,
 	
@@ -67,5 +73,6 @@ gb.config.Default = {
 	    	'stroke-width':'1',
 	   		'stroke-dasharray': "- "
 		}		
-	}
+	},
+	
 };
