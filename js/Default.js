@@ -2,6 +2,10 @@ goog.provide('gb.config.Default');
 
 gb.config.Default = {
 	
+	text: {
+		"font":"10pt 'Arial'"
+	},
+	
 	gridLine: {
 		"stroke-width": 0.1
 	},
@@ -24,13 +28,19 @@ gb.config.Default = {
 	},
 	
 	buttonStyle: {
-		"fill":"#999999", 
+		"fill":"#bbbbbb", 
 		"cursor": "pointer",
 		"stroke-width":0
 	},
 
-	rectangle: {
+	thumbStyle: {
 		"fill":"#333", 
+		"cursor": "arrow",
+		"stroke-width":0
+	},
+	
+	trackStyle: {
+		"fill":"#999", 
 		"cursor": "arrow",
 		"stroke-width":0
 	},

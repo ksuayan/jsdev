@@ -1,6 +1,6 @@
 goog.provide('gb.ui.Draggable');
 goog.require('gb.config.Default');
-goog.require('gb.model.Point');
+goog.require('gb.ui.Control');
 
 
 gb.ui.DragConstraint = {
@@ -11,11 +11,13 @@ gb.ui.DragConstraint = {
 
 
 gb.ui.Draggable = function(x,y, element) {
-	gb.model.Point.call(this,x,y);
+	gb.ui.Control.call(this,x,y);
 	this.element = element;
+	this.x = x;
+	this.y = y;
 };
 
-goog.inherits(gb.ui.Draggable, gb.model.Point);
+goog.inherits(gb.ui.Draggable, gb.ui.Control);
 
 
 gb.ui.Draggable.prototype.setConstraint = function(constraint){
@@ -96,5 +98,14 @@ gb.ui.Draggable.prototype.activate = function() {
 	);
 					
 };
+
+gb.ui.Draggable.prototype.getX = function() {
+	return this.element.x;
+};	
+
+gb.ui.Draggable.prototype.getY = function() {
+	return this.element.y;
+};	
+	
 
 

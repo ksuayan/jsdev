@@ -1,26 +1,25 @@
 goog.provide('gb.ui.DragDemo');
 goog.require('gb.config.Default');
-goog.require('gb.model.Point');
+goog.require('gb.ui.Control');
 
-gb.ui.DragDemo = function(container, width,height) {
-
+gb.ui.DragDemo = function(container, width, height) {
 	this.container = container;
 	this.width = width;
 	this.height = height;
-	this.mapObj = Raphael(this.container, this.width, this.height);
+	this.paper = Raphael(this.container, this.width, this.height);
 };
 
 gb.ui.DragDemo.prototype.grid = function(horizontal,vertical) {
 	// draw horizontal rules
 	for (var i=1; i < this.height; i+=vertical) {
 		var path = "M0 "+i+ " H"+this.width;
-		this.mapObj.path(path).attr(gb.config.Default.gridLine);
+		this.paper.path(path).attr(gb.config.Default.gridLine);
 	}	
 	
 	// draw vertical rules
 	for (var i=1; i < this.width; i+=horizontal) {
 		var path = "M"+i+ " 0 V"+this.height;
-		this.mapObj.path(path).attr(gb.config.Default.gridLine);
+		this.paper.path(path).attr(gb.config.Default.gridLine);
 	}
 };
 
@@ -28,17 +27,30 @@ gb.ui.DragDemo.prototype.grid = function(horizontal,vertical) {
 gb.ui.DragDemo.prototype.initDrawArea = function(xOffset,yOffset, width, height) {
 	this.xOffset = xOffset;
 	this.yOffset = yOffset;
-	this.drawArea = this.mapObj.rect(xOffset,yOffset, width, height)
+	this.drawArea = this.paper.rect(xOffset,yOffset, width, height)
 		.attr(gb.config.Default.drawArea);
+		
+	this.mainText = this.paper.text(50,20, "Test").attr(gb.config.Default.text);
 };
 
 
 gb.ui.DragDemo.prototype.demo = function() {
-	var rect = this.mapObj.rect(100,200, 40,18,5).attr(gb.config.Default.rectangle);
-	var dragItem = new gb.ui.Draggable(rect.x, rect.y, rect);
-	dragItem.setConstraint(gb.ui.DragConstraint.VERTICAL);
-	dragItem.activate();
-	console.debug(dragItem);
+	
+	var thisObj = this;
+	
+	var vScrollBar = new gb.ui.Scrollbar(this.paper, 979, 60, 740, gb.ui.ScrollType.VERTICAL);
+	vScrollBar.activate();
+	
+	console.debug("start", thisObj.mainText, vScrollBar); 
+	vScrollBar.setOnDragComplete(
+		function(){
+			var textAttr = thisObj.mainText.attrs;
+			textAttr.text = vScrollBar.getY();
+			thisObj.mainText.attr(textAttr);
+			console.debug(thisObj.mainText, vScrollBar); 
+		}
+	);
+
 };
 
 
